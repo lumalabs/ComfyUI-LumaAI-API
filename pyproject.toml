@@ -1,0 +1,15 @@
+[project]
+name = "comfyui-lumaai-api"
+description = "This custom node allows you to use the LumaAI API."
+version = "1.0.1"
+license = {file = "LICENSE"}
+dependencies = ["lumaai", "requests", "numpy", "Pillow"]
+
+[project.urls]
+Repository = "https://github.com/lumalabs/ComfyUI-LumaAI-API"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = "lumaai"
+DisplayName = "ComfyUI-LumaAI-API"
+Icon = "https://cdn-luma.com/public/lumalabs.ai/images/logo.png"

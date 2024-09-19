@@ -1,0 +1,263 @@
+{
+  "last_node_id": 28,
+  "last_link_id": 17,
+  "nodes": [
+    {
+      "id": 23,
+      "type": "LoadImage",
+      "pos": [
+        18,
+        590
+      ],
+      "size": {
+        "0": 315,
+        "1": 314
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            10
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "IMG_9655.JPG",
+        "image"
+      ]
+    },
+    {
+      "id": 25,
+      "type": "LumaAIClient",
+      "pos": [
+        30,
+        344
+      ],
+      "size": {
+        "0": 315,
+        "1": 58
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "links": [
+            16
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaAIClient"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 28,
+      "type": "LumaImage2Video",
+      "pos": [
+        727,
+        344
+      ],
+      "size": [
+        382.09642410650736,
+        212
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "link": 16
+        },
+        {
+          "name": "init_image_url",
+          "type": "STRING",
+          "link": 15,
+          "widget": {
+            "name": "init_image_url"
+          }
+        },
+        {
+          "name": "final_image_url",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "final_image_url"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "links": [
+            17
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "generation_id",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaImage2Video"
+      },
+      "widgets_values": [
+        "",
+        false,
+        "9:16",
+        true,
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 26,
+      "type": "LumaPreviewVideo",
+      "pos": [
+        1228,
+        342
+      ],
+      "size": [
+        312.26042261370117,
+        264.63415629022575
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "link": 17,
+          "widget": {
+            "name": "video_url"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaPreviewVideo"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 22,
+      "type": "ImgBBUpload",
+      "pos": [
+        363,
+        589
+      ],
+      "size": {
+        "0": 315,
+        "1": 106
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image_url",
+          "type": "STRING",
+          "links": [
+            15
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImgBBUpload"
+      },
+      "widgets_values": [
+        "",
+        false,
+        60
+      ]
+    }
+  ],
+  "links": [
+    [
+      10,
+      23,
+      0,
+      22,
+      0,
+      "IMAGE"
+    ],
+    [
+      15,
+      22,
+      0,
+      28,
+      1,
+      "STRING"
+    ],
+    [
+      16,
+      25,
+      0,
+      28,
+      0,
+      "LUMACLIENT"
+    ],
+    [
+      17,
+      28,
+      0,
+      26,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6115909044841499,
+      "offset": [
+        493.78857374805784,
+        -7.162115379659536
+      ]
+    }
+  },
+  "version": 0.4
+}

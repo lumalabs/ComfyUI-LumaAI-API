@@ -1,0 +1,149 @@
+{
+  "last_node_id": 30,
+  "last_link_id": 16,
+  "nodes": [
+    {
+      "id": 30,
+      "type": "LumaPreviewVideo",
+      "pos": [
+        1033,
+        378
+      ],
+      "size": {
+        "0": 768,
+        "1": 768
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "link": 16,
+          "widget": {
+            "name": "video_url"
+          }
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaPreviewVideo"
+      },
+      "widgets_values": [
+        "",
+        null
+      ]
+    },
+    {
+      "id": 28,
+      "type": "LumaText2Video",
+      "pos": [
+        526,
+        378
+      ],
+      "size": [
+        400.22849849128625,
+        198.76139540935253
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "link": 15
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "links": [
+            16
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "generation_id",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaText2Video"
+      },
+      "widgets_values": [
+        "Extreme closeup footage of a young sailor woman with a concerned expression during a rainstorm.",
+        true,
+        "9:16",
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 29,
+      "type": "LumaAIClient",
+      "pos": [
+        124,
+        375
+      ],
+      "size": {
+        "0": 315,
+        "1": 58
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "links": [
+            15
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaAIClient"
+      },
+      "widgets_values": [
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      15,
+      29,
+      0,
+      28,
+      0,
+      "LUMACLIENT"
+    ],
+    [
+      16,
+      28,
+      0,
+      30,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8954302432552445,
+      "offset": [
+        -56.377797259191,
+        -151.59915874422396
+      ]
+    }
+  },
+  "version": 0.4
+}

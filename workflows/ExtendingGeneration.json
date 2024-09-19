@@ -1,0 +1,108 @@
+{
+  "22": {
+    "inputs": {
+      "api_key": "",
+      "expire": false,
+      "expiration_time": 60,
+      "image": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "ImgBBUpload",
+    "_meta": {
+      "title": "ImgBB Upload"
+    }
+  },
+  "23": {
+    "inputs": {
+      "image": "IMG_9655.JPG",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "25": {
+    "inputs": {
+      "api_key": ""
+    },
+    "class_type": "LumaAIClient",
+    "_meta": {
+      "title": "LumaAI Client"
+    }
+  },
+  "26": {
+    "inputs": {
+      "video_url": [
+        "28",
+        0
+      ],
+      "$$comfy_animation_preview": {
+        "height": 768
+      }
+    },
+    "class_type": "LumaPreviewVideo",
+    "_meta": {
+      "title": "LumaAI Preview Video"
+    }
+  },
+  "28": {
+    "inputs": {
+      "prompt": "",
+      "loop": false,
+      "aspect_ratio": "9:16",
+      "save": true,
+      "init_image_url": [
+        "22",
+        0
+      ],
+      "filename": "",
+      "gen_output": "generating...",
+      "client": [
+        "25",
+        0
+      ]
+    },
+    "class_type": "LumaImage2Video",
+    "_meta": {
+      "title": "Image to Video"
+    }
+  },
+  "29": {
+    "inputs": {
+      "prompt": " ",
+      "save": true,
+      "init_generation_id": [
+        "28",
+        1
+      ],
+      "filename": "",
+      "gen_output": "generating...",
+      "client": [
+        "25",
+        0
+      ]
+    },
+    "class_type": "LumaExtendGeneration",
+    "_meta": {
+      "title": "Extend Generation"
+    }
+  },
+  "31": {
+    "inputs": {
+      "video_url": [
+        "29",
+        0
+      ],
+      "$$comfy_animation_preview": {
+        "height": 768
+      }
+    },
+    "class_type": "LumaPreviewVideo",
+    "_meta": {
+      "title": "LumaAI Preview Video"
+    }
+  }
+}

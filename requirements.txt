@@ -1,0 +1,4 @@
+lumaai
+requests
+numpy
+Pillow
