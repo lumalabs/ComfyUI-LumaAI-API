@@ -22,7 +22,10 @@ Before using this node, you need to have an LumaAI API key. Get one [here](https
    ```
    The path should be `ComfyUI/custom_nodes/ComfyUI-LumaAI-API/*`, where `*` represents all the files in this repo.
   
-3. Run `cd ComfyUI-LumaAI-API && pip install -r requirements.txt` to install the dependencies.
+3. Install the dependencies:
+
+  - If you are using Windows (ComfyUI portable) run: `.\python_embeded\python.exe -m pip install -r ComfyUI\custom_nodes\ComfyUI-LumaAI-API\requirements.txt`
+  - If you are using Linux or MacOS, run: `cd ComfyUI-LumaAI-API && pip install -r requirements.txt` to install the dependencies.
 
 4. If you don't want to expose your Luma API key, you can add it to the `config.ini` file and keep it empty in the node.
 
