@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-lumaai-api"
 description = "This custom node allows you to use the LumaAI API."
-version = "1.0.1"
+version = "1.0.2"
 license = {file = "LICENSE"}
 dependencies = ["lumaai", "requests", "numpy", "Pillow"]
 
