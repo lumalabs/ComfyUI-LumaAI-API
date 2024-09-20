@@ -247,8 +247,6 @@ class InterpolateGenerations:
         self,
         client,
         prompt,
-        loop,
-        aspect_ratio,
         save,
         generation_id_1,
         generation_id_2,
@@ -262,8 +260,6 @@ class InterpolateGenerations:
 
         generation = client.generations.create(
             prompt=prompt,
-            loop=loop,
-            aspect_ratio=aspect_ratio,
             keyframes={
                 "frame0": {"type": "generation", "id": generation_id_1},
                 "frame1": {"type": "generation", "id": generation_id_2},
