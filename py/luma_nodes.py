@@ -5,6 +5,11 @@ from .lumaai_api_node import (
     InterpolateGenerations,
     ExtendGeneration,
     PreviewVideo,
+    Reference,
+    ConcatReferences,
+    CharacterReference,
+    ImageGeneration,
+    ModifyImage,
 )
 from .imgbb_node import ImgBBUpload
 
@@ -16,6 +21,11 @@ NODE_CLASS_MAPPINGS = {
     "LumaInterpolateGenerations": InterpolateGenerations,
     "LumaExtendGeneration": ExtendGeneration,
     "LumaPreviewVideo": PreviewVideo,
+    "Reference": Reference,
+    "ConcatReferences": ConcatReferences,
+    "CharacterReference": CharacterReference,
+    "LumaImageGeneration": ImageGeneration,
+    "LumaModifyImage": ModifyImage,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -26,4 +36,9 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "LumaInterpolateGenerations": "Interpolate Generations",
     "LumaExtendGeneration": "Extend Generation",
     "LumaPreviewVideo": "LumaAI Preview Video",
+    "LumaReference": "Reference",
+    "LumaConcatReferences": "Concat References",
+    "LumaCharacterReference": "Character Reference",
+    "LumaImageGeneration": "Image Generation",
+    "LumaModifyImage": "Modify Image",
 }

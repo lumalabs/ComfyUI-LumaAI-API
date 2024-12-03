@@ -7,7 +7,13 @@ import { ComfyWidgets } from "../../../scripts/widgets.js";
 app.registerExtension({
     name: "lumaai.showgenerationid",
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
-        if (nodeData.name == "LumaText2Video" || nodeData.name == "LumaImage2Video" || nodeData.name == "LumaInterpolateGenerations" || nodeData.name == "LumaExtendGeneration") {
+        if (nodeData.name == "LumaText2Video"
+            || nodeData.name == "LumaImage2Video"
+            || nodeData.name == "LumaInterpolateGenerations"
+            || nodeData.name == "LumaExtendGeneration"
+            || nodeData.name == "LumaImageGeneration"
+            || nodeData.name == "LumaModifyImage"
+        ) {
             function populate(text) {
                 const v = [...text];
                 if (this.widgets) {

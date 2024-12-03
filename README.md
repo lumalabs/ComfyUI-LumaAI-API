@@ -4,7 +4,7 @@
 </p>
 
 
-This is a custom node for ComfyUI that allows you to use the Luma AI API directly in ComfyUI. Luma AI API is based on top of [Dream Machine](https://lumalabs.ai/dream-machine/api), which is a video generation model developed by Luma. For more information, see [Luma AI API Documentation](https://docs.lumalabs.ai/docs/api).
+This is a custom node for ComfyUI that allows you to use the Luma AI API directly in ComfyUI. Luma AI API is based on top of [Dream Machine](https://lumalabs.ai/dream-machine/api), which is a complete suite of models for image and video generation. For more information, see [Luma AI API Documentation](https://docs.lumalabs.ai/docs/api).
 
 ## Requirements
 
@@ -43,6 +43,8 @@ Before using this node, you need to have an LumaAI API key. Get one [here](https
 
 Most of the nodes allow you to save locally the output video. If you keep the default `filename` (empty string), the video will be saved in the `outputs` folder using the `generation_id` as the name.
 
+For images, the node will always save the image locally, but you can set the `filename` to save it with a custom name.
+
 ### LumaAIClient
 
 This node is used to create a LumaAI client.
@@ -71,6 +73,26 @@ This node is used to preview a video. The video is resized to 768px to look bett
 
 This node is used to upload an image to ImgBB and return the URL. We need this because Luma API currently only supports image urls as input.
 To use this node, you need to have an ImgBB API key. Create an account and get one [here](https://api.imgbb.com/).
+
+### Reference
+
+This node is used to create a reference from an image URL. It is used for style and image references.
+
+### ConcatReferences
+
+This node is used to concatenate a list of references.
+
+### CharacterReference
+
+This node is used to create a character reference from a list of image URLs.
+
+### ImageGeneration
+
+This node is used to generate an image from a prompt.
+
+### ModifyImage
+
+This node is used to modify an image.
 
 ## Examples
 

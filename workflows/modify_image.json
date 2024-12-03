@@ -1,0 +1,297 @@
+{
+  "last_node_id": 11,
+  "last_link_id": 14,
+  "nodes": [
+    {
+      "id": 11,
+      "type": "PreviewImage",
+      "pos": [
+        1127,
+        122
+      ],
+      "size": [
+        210,
+        246
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 14,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 8,
+      "type": "LumaModifyImage",
+      "pos": [
+        641,
+        120
+      ],
+      "size": [
+        380.4000244140625,
+        122
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "link": 10,
+          "slot_index": 0
+        },
+        {
+          "name": "modify_image_ref",
+          "type": "REFERENCE",
+          "link": 12
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 13,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image_url",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "generation_id",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            14
+          ],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaModifyImage"
+      },
+      "widgets_values": [
+        "photon-1",
+        "transform all the flowers to sunflowers"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "Reference",
+      "pos": [
+        248,
+        194
+      ],
+      "size": [
+        315,
+        82
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image_url",
+          "type": "STRING",
+          "link": 11,
+          "widget": {
+            "name": "image_url"
+          },
+          "slot_index": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "reference",
+          "type": "REFERENCE",
+          "links": [
+            12
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Reference"
+      },
+      "widgets_values": [
+        "https://staging.storage.cdn-luma.com/dream_machine/400460d3-cc24-47ae-a015-d4d1c6296aba/38cc78d7-95aa-4e6e-b1ac-4123ce24725e_image0c73fa8a463114bf89e30892a301c532e.jpg",
+        0.5
+      ]
+    },
+    {
+      "id": 5,
+      "type": "PrimitiveNode",
+      "pos": [
+        2,
+        199
+      ],
+      "size": {
+        "0": 210,
+        "1": 58
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            11
+          ],
+          "slot_index": 0,
+          "widget": {
+            "name": "image_url"
+          }
+        }
+      ],
+      "properties": {
+        "Run widget replace on values": false
+      },
+      "widgets_values": [
+        "https://staging.storage.cdn-luma.com/dream_machine/400460d3-cc24-47ae-a015-d4d1c6296aba/38cc78d7-95aa-4e6e-b1ac-4123ce24725e_image0c73fa8a463114bf89e30892a301c532e.jpg"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "PrimitiveNode",
+      "pos": [
+        120,
+        334
+      ],
+      "size": [
+        442.6914007018429,
+        133.1652411475094
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            13
+          ],
+          "slot_index": 0,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "properties": {
+        "Run widget replace on values": false
+      },
+      "widgets_values": [
+        "transform all the flowers to sunflowers"
+      ]
+    },
+    {
+      "id": 1,
+      "type": "LumaAIClient",
+      "pos": [
+        246,
+        66
+      ],
+      "size": {
+        "0": 315,
+        "1": 58
+      },
+      "flags": {
+        "collapsed": false
+      },
+      "order": 2,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "links": [
+            10
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaAIClient"
+      },
+      "widgets_values": [
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      10,
+      1,
+      0,
+      8,
+      0,
+      "LUMACLIENT"
+    ],
+    [
+      11,
+      5,
+      0,
+      9,
+      0,
+      "STRING"
+    ],
+    [
+      12,
+      9,
+      0,
+      8,
+      1,
+      "REFERENCE"
+    ],
+    [
+      13,
+      10,
+      0,
+      8,
+      2,
+      "STRING"
+    ],
+    [
+      14,
+      8,
+      2,
+      11,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.2100000000000002,
+      "offset": [
+        75.7556407983373,
+        175.25858695772177
+      ]
+    }
+  },
+  "version": 0.4
+}
