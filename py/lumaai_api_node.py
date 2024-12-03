@@ -5,6 +5,7 @@ import time
 from lumaai import LumaAI
 
 import folder_paths
+import nodes
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
@@ -14,7 +15,7 @@ config = configparser.ConfigParser()
 config.read(config_path)
 
 try:
-    luma_api_key = config['API']['LUMAAI_API_KEY']
+    luma_api_key = config["API"]["LUMAAI_API_KEY"]
     if luma_api_key != "":
         os.environ["LUMAAI_API_KEY"] = luma_api_key
     else:
@@ -28,6 +29,7 @@ def download_file(url, file_name):
     with open(file_name, "wb") as file:
         file.write(response.content)
     print(f"File downloaded as {file_name}")
+
 
 def parse_filename(filename):
     # Remove file extension if present
@@ -134,7 +136,9 @@ class Text2Video:
             directory, filename = parse_filename(filename)
             if filename == "":
                 filename = generation_id
-            download_file(video_url, os.path.join(self.output_dir, directory, filename + ".mp4"))
+            download_file(
+                video_url, os.path.join(self.output_dir, directory, filename + ".mp4")
+            )
 
         return {
             "ui": {"text": [generation_id]},
@@ -210,7 +214,9 @@ class Image2Video:
             directory, filename = parse_filename(filename)
             if filename == "":
                 filename = generation_id
-            download_file(video_url, os.path.join(self.output_dir, directory, filename + ".mp4"))
+            download_file(
+                video_url, os.path.join(self.output_dir, directory, filename + ".mp4")
+            )
 
         return {
             "ui": {"text": [generation_id]},
@@ -280,7 +286,9 @@ class InterpolateGenerations:
             directory, filename = parse_filename(filename)
             if filename == "":
                 filename = generation_id
-            download_file(video_url, os.path.join(self.output_dir, directory, filename + ".mp4"))
+            download_file(
+                video_url, os.path.join(self.output_dir, directory, filename + ".mp4")
+            )
 
         return {
             "ui": {"text": [generation_id]},
@@ -368,7 +376,9 @@ class ExtendGeneration:
             directory, filename = parse_filename(filename)
             if filename == "":
                 filename = new_generation_id
-            download_file(video_url, os.path.join(self.output_dir, directory, filename + ".mp4"))
+            download_file(
+                video_url, os.path.join(self.output_dir, directory, filename + ".mp4")
+            )
 
         return {
             "ui": {"text": [new_generation_id]},
@@ -395,3 +405,245 @@ class PreviewVideo:
 
     def run(self, video_url):
         return {"ui": {"video_url": [video_url]}}
+
+
+class Reference:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "image_url": ("STRING", {"forceInput": True}),
+                "weight": (
+                    "FLOAT",
+                    {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01},
+                ),
+            }
+        }
+
+    RETURN_TYPES = ("REFERENCE",)
+    RETURN_NAMES = ("reference",)
+    FUNCTION = "run"
+    CATEGORY = "LumaAI"
+
+    def run(self, image_url, weight):
+        """
+        Create a reference from an image URL and a weight.
+        """
+        return ({"url": image_url, "weight": weight},)
+
+
+class ConcatReferences:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {},
+            "optional": {
+                "reference_1": ("REFERENCE", {"forceInput": True}),
+                "reference_2": ("REFERENCE", {"forceInput": True}),
+                "reference_3": ("REFERENCE", {"forceInput": True}),
+                "reference_4": ("REFERENCE", {"forceInput": True}),
+            },
+        }
+
+    RETURN_TYPES = ("CONCAT_REFERENCES",)
+    RETURN_NAMES = ("concat_references",)
+    FUNCTION = "run"
+    CATEGORY = "LumaAI"
+
+    def run(
+        self, reference_1=None, reference_2=None, reference_3=None, reference_4=None
+    ):
+        """
+        Concatenate a list of references.
+        """
+        references = []
+        for reference in [reference_1, reference_2, reference_3, reference_4]:
+            if reference is not None:
+                references.append(reference)
+        if len(references) == 0:
+            raise ValueError("You must provide at least one reference")
+        return (references,)
+
+
+class CharacterReference:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {},
+            "optional": {
+                "character_image_url_1": ("STRING", {"forceInput": True}),
+                "character_image_url_2": ("STRING", {"forceInput": True}),
+                "character_image_url_3": ("STRING", {"forceInput": True}),
+                "character_image_url_4": ("STRING", {"forceInput": True}),
+            },
+        }
+
+    RETURN_TYPES = ("CHARACTER_REFERENCE",)
+    RETURN_NAMES = ("character_reference",)
+    FUNCTION = "run"
+    CATEGORY = "LumaAI"
+
+    def run(
+        self,
+        character_image_url_1=None,
+        character_image_url_2=None,
+        character_image_url_3=None,
+        character_image_url_4=None,
+    ):
+        """
+        Create a character reference from a list of image URLs.
+        """
+        urls = []
+        for url in [
+            character_image_url_1,
+            character_image_url_2,
+            character_image_url_3,
+            character_image_url_4,
+        ]:
+            if url is not None:
+                urls.append(url)
+        if len(urls) == 0:
+            raise ValueError("You must provide at least one character image URL")
+
+        character_reference = {"identity0": {"images": urls}}
+        return (character_reference,)
+
+
+class ImageGeneration:
+    def __init__(self):
+        self.output_dir = folder_paths.get_output_directory()
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "client": ("LUMACLIENT", {"forceInput": True}),
+                "model": (["photon-1", "photon-flash-1"],),
+                "prompt": ("STRING", {"forceInput": True, }),
+                "aspect_ratio": (["9:16", "3:4", "1:1", "4:3", "16:9", "21:9"],),
+            },
+            "optional": {
+                "image_ref": ("CONCAT_REFERENCES", {"forceInput": True}),
+                "style_ref": ("REFERENCE", {"forceInput": True}),
+                "character_ref": ("CHARACTER_REFERENCE", {"forceInput": True}),
+                "filename": ("STRING", {"default": ""}),
+            },
+        }
+
+    RETURN_TYPES = ("STRING", "STRING", "IMAGE")
+    RETURN_NAMES = ("image_url", "generation_id", "image")
+    OUTPUT_NODE = True
+    FUNCTION = "run"
+    CATEGORY = "LumaAI"
+
+    def run(
+        self,
+        client,
+        model,
+        prompt,
+        aspect_ratio,
+        image_ref=None,
+        style_ref=None,
+        character_ref=None,
+        filename="",
+    ):
+        """
+        Generate an image from a text prompt and optional references.
+        """
+        if style_ref is not None:
+            style_ref = [style_ref]
+
+        generation = client.generations.image.create(
+            prompt=prompt,
+            model=model,
+            aspect_ratio=aspect_ratio,
+            image_ref=image_ref,
+            style_ref=style_ref,
+            character_ref=character_ref,
+        )
+
+        generation_id = generation.id
+        completed = False
+        while not completed:
+            generation = client.generations.get(id=generation_id)
+            if generation.state == "completed":
+                completed = True
+            elif generation.state == "failed":
+                raise ValueError(f"Generation failed: {generation.failure_reason}")
+            time.sleep(1)
+
+        image_url = generation.assets.image
+        directory, filename = parse_filename(filename)
+        if filename == "":
+            filename = generation_id
+        download_file(
+            image_url, os.path.join(self.output_dir, directory, filename + ".jpg")
+        )
+
+        image, _ = nodes.LoadImage().load_image(
+            os.path.join(self.output_dir, directory, filename + ".jpg")
+        )
+
+        return {
+            "ui": {"text": [generation_id]},
+            "result": (image_url, generation_id, image),
+        }
+
+
+class ModifyImage:
+    def __init__(self):
+        self.output_dir = folder_paths.get_output_directory()
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "client": ("LUMACLIENT", {"forceInput": True}),
+                "model": (["photon-1", "photon-flash-1"],),
+                "prompt": ("STRING", {"forceInput": True, }),
+                "modify_image_ref": ("REFERENCE", {"forceInput": True}),
+            },
+        }
+
+    RETURN_TYPES = ("STRING", "STRING", "IMAGE")
+    RETURN_NAMES = ("image_url", "generation_id", "image")
+    OUTPUT_NODE = True
+    FUNCTION = "run"
+    CATEGORY = "LumaAI"
+
+    def run(self, client, model, prompt, modify_image_ref, filename=""):
+        """
+        Modify an image.
+        """
+        generation = client.generations.image.create(
+            prompt=prompt,
+            model=model,
+            modify_image_ref=modify_image_ref,
+        )
+
+        generation_id = generation.id
+        completed = False
+        while not completed:
+            generation = client.generations.get(id=generation_id)
+            if generation.state == "completed":
+                completed = True
+            elif generation.state == "failed":
+                raise ValueError(f"Generation failed: {generation.failure_reason}")
+            time.sleep(1)
+
+        image_url = generation.assets.image
+        directory, filename = parse_filename(filename)
+        if filename == "":
+            filename = generation_id
+        download_file(
+            image_url, os.path.join(self.output_dir, directory, filename + ".jpg")
+        )
+
+        image, _ = nodes.LoadImage().load_image(
+            os.path.join(self.output_dir, directory, filename + ".jpg")
+        )
+
+        return {
+            "ui": {"text": [generation_id]},
+            "result": (image_url, generation_id, image),
+        }

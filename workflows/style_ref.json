@@ -1,0 +1,359 @@
+{
+  "last_node_id": 7,
+  "last_link_id": 6,
+  "nodes": [
+    {
+      "id": 5,
+      "type": "LoadImage",
+      "pos": [
+        -309,
+        482
+      ],
+      "size": [
+        315,
+        314.00002670288086
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            3
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "00014.png",
+        "image"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "ImgBBUpload",
+      "pos": [
+        58,
+        482
+      ],
+      "size": {
+        "0": 315,
+        "1": 106
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image_url",
+          "type": "STRING",
+          "links": [
+            4
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImgBBUpload"
+      },
+      "widgets_values": [
+        "",
+        false,
+        60
+      ]
+    },
+    {
+      "id": 2,
+      "type": "PreviewImage",
+      "pos": [
+        1248,
+        237
+      ],
+      "size": {
+        "0": 210,
+        "1": 26
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 1,
+      "type": "LumaImageGeneration",
+      "pos": [
+        772,
+        199
+      ],
+      "size": [
+        342.5999755859375,
+        190
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "link": 2
+        },
+        {
+          "name": "image_ref",
+          "type": "CONCAT_REFERENCES",
+          "link": null
+        },
+        {
+          "name": "style_ref",
+          "type": "REFERENCE",
+          "link": 5
+        },
+        {
+          "name": "character_ref",
+          "type": "CHARACTER_REFERENCE",
+          "link": null
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image_url",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "generation_id",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            1
+          ],
+          "shape": 3,
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaImageGeneration"
+      },
+      "widgets_values": [
+        "photon-1",
+        "",
+        "9:16",
+        ""
+      ]
+    },
+    {
+      "id": 3,
+      "type": "LumaAIClient",
+      "pos": [
+        380,
+        195
+      ],
+      "size": {
+        "0": 315,
+        "1": 58
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "links": [
+            2
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaAIClient"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 6,
+      "type": "Reference",
+      "pos": [
+        400,
+        489
+      ],
+      "size": [
+        315,
+        82
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image_url",
+          "type": "STRING",
+          "link": 4,
+          "widget": {
+            "name": "image_url"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "reference",
+          "type": "REFERENCE",
+          "links": [
+            5
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Reference"
+      },
+      "widgets_values": [
+        "",
+        1
+      ]
+    },
+    {
+      "id": 7,
+      "type": "PrimitiveNode",
+      "pos": [
+        392,
+        318
+      ],
+      "size": {
+        "0": 210,
+        "1": 58
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "properties": {
+        "Run widget replace on values": false
+      },
+      "widgets_values": [
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      2,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      3,
+      0,
+      1,
+      0,
+      "LUMACLIENT"
+    ],
+    [
+      3,
+      5,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      4,
+      4,
+      0,
+      6,
+      0,
+      "STRING"
+    ],
+    [
+      5,
+      6,
+      0,
+      1,
+      2,
+      "REFERENCE"
+    ],
+    [
+      6,
+      7,
+      0,
+      1,
+      4,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8264462809917354,
+      "offset": [
+        357.39093750000023,
+        135.43187500000013
+      ]
+    }
+  },
+  "version": 0.4
+}
