@@ -93,6 +93,10 @@ class Text2Video:
         self.output_dir = folder_paths.get_output_directory()
 
     @classmethod
+    def IS_CHANGED(cls, *args, **kwargs):
+        return float("NaN")
+
+    @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
@@ -152,6 +156,10 @@ class Text2Video:
 class Image2Video:
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
+    
+    @classmethod
+    def IS_CHANGED(cls, *args, **kwargs):
+        return float("NaN")
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -230,6 +238,10 @@ class Image2Video:
 class InterpolateGenerations:
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
+    
+    @classmethod
+    def IS_CHANGED(cls, *args, **kwargs):
+        return float("NaN")
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -302,6 +314,10 @@ class InterpolateGenerations:
 class ExtendGeneration:
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
+    
+    @classmethod
+    def IS_CHANGED(cls, *args, **kwargs):
+        return float("NaN")
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -512,6 +528,10 @@ class CharacterReference:
 class ImageGeneration:
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
+    
+    @classmethod
+    def IS_CHANGED(cls, *args, **kwargs):
+        return float("NaN")
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -593,6 +613,10 @@ class ImageGeneration:
 class ModifyImage:
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
+    
+    @classmethod
+    def IS_CHANGED(cls, *args, **kwargs):
+        return float("NaN")
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -629,7 +653,7 @@ class ModifyImage:
                 completed = True
             elif generation.state == "failed":
                 raise ValueError(f"Generation failed: {generation.failure_reason}")
-            time.sleep(1)
+            time.sleep(3)
 
         image_url = generation.assets.image
         directory, filename = parse_filename(filename)
