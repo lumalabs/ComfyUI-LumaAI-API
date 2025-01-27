@@ -88,6 +88,77 @@ class LumaAIClient:
         return (client,)
 
 
+class Ray2Text2Video:
+    def __init__(self):
+        self.output_dir = folder_paths.get_output_directory()
+
+    @classmethod
+    def IS_CHANGED(cls, *args, **kwargs):
+        return float("NaN")
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "client": ("LUMACLIENT", {"forceInput": True}),
+                "prompt": ("STRING", {"multiline": True, "default": ""}),
+                "duration": (["5s", "9s"], ),
+                "resolution": (["540p", "720p"], ),
+                "loop": ("BOOLEAN", {"default": False}),
+                "aspect_ratio": (["9:16", "3:4", "1:1", "4:3", "16:9", "21:9"],),
+                "save": ("BOOLEAN", {"default": True}),
+            },
+            "optional": {"filename": ("STRING", {"default": ""})},
+        }
+
+    RETURN_TYPES = ("STRING", "STRING")
+    RETURN_NAMES = ("video_url", "generation_id")
+    OUTPUT_NODE = True
+    FUNCTION = "run"
+    CATEGORY = "LumaAI/Ray2"
+
+    def run(self, client, prompt, duration, resolution, loop, aspect_ratio, save, filename):
+        """
+        Generate a video from a text prompt.
+        """
+        if prompt == "":
+            raise ValueError("Prompt is required")
+
+        generation = client.generations.create(
+            prompt=prompt,
+            model="ray-2",
+            loop=loop,
+            aspect_ratio=aspect_ratio,
+            duration=duration,
+            resolution=resolution,
+        )
+        generation_id = generation.id
+        completed = False
+        while not completed:
+            generation = client.generations.get(id=generation_id)
+            if generation.state == "completed":
+                completed = True
+            elif generation.state == "failed":
+                raise ValueError(f"Generation failed: {generation.failure_reason}")
+            time.sleep(4)
+
+        video_url = generation.assets.video
+        if save:
+            directory, filename = parse_filename(filename)
+            if filename == "":
+                filename = generation_id
+            download_file(
+                video_url, os.path.join(self.output_dir, directory, filename + ".mp4")
+            )
+
+        return {
+            "ui": {"text": [generation_id]},
+            "result": (
+                video_url,
+                generation_id,
+            ),
+        }
+
 class Text2Video:
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
@@ -113,7 +184,7 @@ class Text2Video:
     RETURN_NAMES = ("video_url", "generation_id")
     OUTPUT_NODE = True
     FUNCTION = "run"
-    CATEGORY = "LumaAI"
+    CATEGORY = "LumaAI/Ray1.6"
 
     def run(self, client, prompt, loop, aspect_ratio, save, filename):
         """
@@ -180,7 +251,7 @@ class Image2Video:
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("video_url", "generation_id")
     FUNCTION = "run"
-    CATEGORY = "LumaAI"
+    CATEGORY = "LumaAI/Ray1.6"
 
     def run(
         self,
@@ -259,7 +330,7 @@ class InterpolateGenerations:
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("video_url", "generation_id")
     FUNCTION = "run"
-    CATEGORY = "LumaAI"
+    CATEGORY = "LumaAI/Ray1.6"
 
     def run(
         self,
@@ -339,7 +410,7 @@ class ExtendGeneration:
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("video_url", "generation_id")
     FUNCTION = "run"
-    CATEGORY = "LumaAI"
+    CATEGORY = "LumaAI/Ray1.6"
 
     def run(
         self,
@@ -416,7 +487,7 @@ class PreviewVideo:
 
     OUTPUT_NODE = True
     FUNCTION = "run"
-    CATEGORY = "LumaAI"
+    CATEGORY = "LumaAI/Utils"
     RETURN_TYPES = ()
 
     def run(self, video_url):
@@ -439,7 +510,7 @@ class Reference:
     RETURN_TYPES = ("REFERENCE",)
     RETURN_NAMES = ("reference",)
     FUNCTION = "run"
-    CATEGORY = "LumaAI"
+    CATEGORY = "LumaAI/Photon"
 
     def run(self, image_url, weight):
         """
@@ -464,7 +535,7 @@ class ConcatReferences:
     RETURN_TYPES = ("CONCAT_REFERENCES",)
     RETURN_NAMES = ("concat_references",)
     FUNCTION = "run"
-    CATEGORY = "LumaAI"
+    CATEGORY = "LumaAI/Photon"
 
     def run(
         self, reference_1=None, reference_2=None, reference_3=None, reference_4=None
@@ -497,7 +568,7 @@ class CharacterReference:
     RETURN_TYPES = ("CHARACTER_REFERENCE",)
     RETURN_NAMES = ("character_reference",)
     FUNCTION = "run"
-    CATEGORY = "LumaAI"
+    CATEGORY = "LumaAI/Photon"
 
     def run(
         self,
@@ -554,7 +625,7 @@ class ImageGeneration:
     RETURN_NAMES = ("image_url", "generation_id", "image")
     OUTPUT_NODE = True
     FUNCTION = "run"
-    CATEGORY = "LumaAI"
+    CATEGORY = "LumaAI/Photon"
 
     def run(
         self,
@@ -633,7 +704,7 @@ class ModifyImage:
     RETURN_NAMES = ("image_url", "generation_id", "image")
     OUTPUT_NODE = True
     FUNCTION = "run"
-    CATEGORY = "LumaAI"
+    CATEGORY = "LumaAI/Photon"
 
     def run(self, client, model, prompt, modify_image_ref, filename=""):
         """
