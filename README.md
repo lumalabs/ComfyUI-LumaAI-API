@@ -49,6 +49,10 @@ For images, the node will always save the image locally, but you can set the `fi
 
 This node is used to create a LumaAI client.
 
+### Ray2Text2Video
+
+This node is used to generate a video from a text prompt with the latest and most powerful model, Ray2.
+
 ### LumaText2Video
 
 This node is used to generate a video from a text prompt.

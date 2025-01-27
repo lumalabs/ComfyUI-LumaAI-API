@@ -1,0 +1,150 @@
+{
+  "last_node_id": 31,
+  "last_link_id": 18,
+  "nodes": [
+    {
+      "id": 30,
+      "type": "LumaPreviewVideo",
+      "pos": [
+        1033,
+        378
+      ],
+      "size": [
+        768,
+        768
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "link": 18,
+          "widget": {
+            "name": "video_url"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "LumaPreviewVideo"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 29,
+      "type": "LumaAIClient",
+      "pos": [
+        124,
+        375
+      ],
+      "size": [
+        315,
+        58
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "links": [
+            17
+          ],
+          "slot_index": 0,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaAIClient"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 31,
+      "type": "Ray2Text2Video",
+      "pos": [
+        503.9627990722656,
+        379.0370178222656
+      ],
+      "size": [
+        400,
+        240
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "link": 17
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "links": [
+            18
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "generation_id",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Ray2Text2Video"
+      },
+      "widgets_values": [
+        "",
+        "5s",
+        "720p",
+        false,
+        "9:16",
+        true,
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      17,
+      29,
+      0,
+      31,
+      0,
+      "LUMACLIENT"
+    ],
+    [
+      18,
+      31,
+      0,
+      30,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9090909090909091,
+      "offset": [
+        -21.961315505259062,
+        -186.1272521835087
+      ]
+    }
+  },
+  "version": 0.4
+}
