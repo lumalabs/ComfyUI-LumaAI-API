@@ -10,6 +10,7 @@ from .lumaai_api_node import (
     CharacterReference,
     ImageGeneration,
     ModifyImage,
+    Ray2Text2Video,
 )
 from .imgbb_node import ImgBBUpload
 
@@ -26,6 +27,7 @@ NODE_CLASS_MAPPINGS = {
     "CharacterReference": CharacterReference,
     "LumaImageGeneration": ImageGeneration,
     "LumaModifyImage": ModifyImage,
+    "Ray2Text2Video": Ray2Text2Video,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -41,4 +43,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "LumaCharacterReference": "Character Reference",
     "LumaImageGeneration": "Image Generation",
     "LumaModifyImage": "Modify Image",
+    "Ray2Text2Video": "Ray2 Text to Video",
 }
