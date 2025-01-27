@@ -132,7 +132,6 @@ class Ray2Text2Video:
             duration=duration,
             resolution=resolution,
         )
-        print(generation)
         generation_id = generation.id
         completed = False
         while not completed:
