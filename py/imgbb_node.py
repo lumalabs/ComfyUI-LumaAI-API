@@ -60,7 +60,7 @@ class ImgBBUpload:
             result = response.json()
 
             if result.get("success"):
-                return result["data"]["url"], result["data"]["delete_url"]
+                return (result["data"]["url"],)
             else:
                 error_message = result.get("error", {}).get("message", "Unknown error")
                 raise ValueError(f"Error: {error_message}")
