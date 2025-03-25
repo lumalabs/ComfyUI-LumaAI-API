@@ -1,0 +1,227 @@
+{
+  "last_node_id": 6,
+  "last_link_id": 9,
+  "nodes": [
+    {
+      "id": 5,
+      "type": "LumaPreviewVideo",
+      "pos": [
+        1583.6092529296875,
+        145.96243286132812
+      ],
+      "size": [
+        768,
+        768
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "link": 8,
+          "widget": {
+            "name": "video_url"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "LumaPreviewVideo"
+      },
+      "widgets_values": [
+        "",
+        null
+      ]
+    },
+    {
+      "id": 2,
+      "type": "LumaText2Video",
+      "pos": [
+        460.42974853515625,
+        274.5
+      ],
+      "size": [
+        400,
+        364
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "generation_id",
+          "type": "STRING",
+          "links": [
+            7
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaText2Video"
+      },
+      "widgets_values": [
+        "ray-flash-2",
+        "a car",
+        "5s",
+        false,
+        "9:16",
+        "540p",
+        true,
+        "",
+        "24ed0260-bc59-419f-8f10-794d291176d0",
+        "24ed0260-bc59-419f-8f10-794d291176d0"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "LumaUpscaleGeneration",
+      "pos": [
+        1056.1300048828125,
+        351.3099365234375
+      ],
+      "size": [
+        315,
+        150
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "link": 9
+        },
+        {
+          "name": "generation_id",
+          "type": "STRING",
+          "link": 7,
+          "widget": {
+            "name": "generation_id"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "generation_id",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaUpscaleGeneration"
+      },
+      "widgets_values": [
+        "",
+        "1080p",
+        true,
+        ""
+      ]
+    },
+    {
+      "id": 3,
+      "type": "LumaAIClient",
+      "pos": [
+        32.32486343383789,
+        344.1593933105469
+      ],
+      "size": [
+        315,
+        58
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "links": [
+            1,
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaAIClient"
+      },
+      "widgets_values": [
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      3,
+      0,
+      2,
+      0,
+      "LUMACLIENT"
+    ],
+    [
+      7,
+      2,
+      1,
+      6,
+      1,
+      "STRING"
+    ],
+    [
+      8,
+      6,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      9,
+      3,
+      0,
+      6,
+      0,
+      "LUMACLIENT"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9849732675807652,
+      "offset": [
+        -92.60513941852872,
+        -55.773528450482495
+      ]
+    },
+    "node_versions": {
+      "ComfyUI-LumaAI-API": "a53576c98bcffffca5474451a8ca5de4faf92943"
+    }
+  },
+  "version": 0.4
+}

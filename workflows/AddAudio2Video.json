@@ -1,0 +1,227 @@
+{
+  "last_node_id": 5,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 2,
+      "type": "LumaText2Video",
+      "pos": [
+        460.42974853515625,
+        274.5
+      ],
+      "size": [
+        400,
+        364
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "generation_id",
+          "type": "STRING",
+          "links": [
+            3
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaText2Video"
+      },
+      "widgets_values": [
+        "ray-flash-2",
+        "a car",
+        "5s",
+        false,
+        "9:16",
+        "540p",
+        true,
+        "",
+        "ee4e9dad-9f1e-4e5e-bc37-1b46e9825750",
+        "ee4e9dad-9f1e-4e5e-bc37-1b46e9825750"
+      ]
+    },
+    {
+      "id": 1,
+      "type": "LumaAddAudio2Video",
+      "pos": [
+        1003.0374755859375,
+        442.3060607910156
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "link": 5
+        },
+        {
+          "name": "generation_id",
+          "type": "STRING",
+          "link": 3,
+          "widget": {
+            "name": "generation_id"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "links": [
+            4
+          ]
+        },
+        {
+          "name": "generation_id",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaAddAudio2Video"
+      },
+      "widgets_values": [
+        "",
+        "noise from a car",
+        "",
+        true,
+        ""
+      ]
+    },
+    {
+      "id": 5,
+      "type": "LumaPreviewVideo",
+      "pos": [
+        1583.6092529296875,
+        145.96243286132812
+      ],
+      "size": [
+        768,
+        768
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "link": 4,
+          "widget": {
+            "name": "video_url"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "LumaPreviewVideo"
+      },
+      "widgets_values": [
+        "",
+        null
+      ]
+    },
+    {
+      "id": 3,
+      "type": "LumaAIClient",
+      "pos": [
+        32.32486343383789,
+        344.1593933105469
+      ],
+      "size": [
+        315,
+        58
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "client",
+          "type": "LUMACLIENT",
+          "links": [
+            1,
+            5
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LumaAIClient"
+      },
+      "widgets_values": [
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      3,
+      0,
+      2,
+      0,
+      "LUMACLIENT"
+    ],
+    [
+      3,
+      2,
+      1,
+      1,
+      1,
+      "STRING"
+    ],
+    [
+      4,
+      1,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      5,
+      3,
+      0,
+      1,
+      0,
+      "LUMACLIENT"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.5559917313492242,
+      "offset": [
+        230.56296338473092,
+        95.73040355967112
+      ]
+    },
+    "node_versions": {
+      "ComfyUI-LumaAI-API": "a53576c98bcffffca5474451a8ca5de4faf92943"
+    }
+  },
+  "version": 0.4
+}

@@ -1,9 +1,9 @@
 [project]
 name = "comfyui-lumaai-api"
 description = "This custom node allows you to use the LumaAI API."
-version = "1.0.6"
+version = "1.1.0"
 license = {file = "LICENSE"}
-dependencies = ["lumaai==1.3.0", "requests", "numpy", "Pillow"]
+dependencies = ["lumaai==1.7.0", "requests", "numpy", "Pillow"]
 
 [project.urls]
 Repository = "https://github.com/lumalabs/ComfyUI-LumaAI-API"

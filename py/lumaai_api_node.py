@@ -53,6 +53,27 @@ def parse_filename(filename):
     return directory, filename
 
 
+def wait_for_generation(client, generation_id, save, filename, output_dir):
+    completed = False
+    while not completed:
+        generation = client.generations.get(id=generation_id)
+        if generation.state == "completed":
+            completed = True
+        elif generation.state == "failed":
+            raise ValueError(f"Generation failed: {generation.failure_reason}")
+        time.sleep(3)
+
+    video_url = generation.assets.video
+    if save:
+        directory, filename = parse_filename(filename)
+        if filename == "":
+            filename = generation_id
+        download_file(
+            video_url, os.path.join(output_dir, directory, filename + ".mp4")
+        )
+    return video_url
+
+
 class LumaAIClient:
     @classmethod
     def INPUT_TYPES(cls):
@@ -87,78 +108,6 @@ class LumaAIClient:
 
         return (client,)
 
-
-class Ray2Text2Video:
-    def __init__(self):
-        self.output_dir = folder_paths.get_output_directory()
-
-    @classmethod
-    def IS_CHANGED(cls, *args, **kwargs):
-        return float("NaN")
-
-    @classmethod
-    def INPUT_TYPES(cls):
-        return {
-            "required": {
-                "client": ("LUMACLIENT", {"forceInput": True}),
-                "prompt": ("STRING", {"multiline": True, "default": ""}),
-                "duration": (["5s", "9s"], ),
-                "resolution": (["540p", "720p"], ),
-                "loop": ("BOOLEAN", {"default": False}),
-                "aspect_ratio": (["9:16", "3:4", "1:1", "4:3", "16:9", "21:9"],),
-                "save": ("BOOLEAN", {"default": True}),
-            },
-            "optional": {"filename": ("STRING", {"default": ""})},
-        }
-
-    RETURN_TYPES = ("STRING", "STRING")
-    RETURN_NAMES = ("video_url", "generation_id")
-    OUTPUT_NODE = True
-    FUNCTION = "run"
-    CATEGORY = "LumaAI/Ray2"
-
-    def run(self, client, prompt, duration, resolution, loop, aspect_ratio, save, filename):
-        """
-        Generate a video from a text prompt.
-        """
-        if prompt == "":
-            raise ValueError("Prompt is required")
-
-        generation = client.generations.create(
-            prompt=prompt,
-            model="ray-2",
-            loop=loop,
-            aspect_ratio=aspect_ratio,
-            duration=duration,
-            resolution=resolution,
-        )
-        generation_id = generation.id
-        completed = False
-        while not completed:
-            generation = client.generations.get(id=generation_id)
-            if generation.state == "completed":
-                completed = True
-            elif generation.state == "failed":
-                raise ValueError(f"Generation failed: {generation.failure_reason}")
-            time.sleep(4)
-
-        video_url = generation.assets.video
-        if save:
-            directory, filename = parse_filename(filename)
-            if filename == "":
-                filename = generation_id
-            download_file(
-                video_url, os.path.join(self.output_dir, directory, filename + ".mp4")
-            )
-
-        return {
-            "ui": {"text": [generation_id]},
-            "result": (
-                video_url,
-                generation_id,
-            ),
-        }
-
 class Text2Video:
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
@@ -172,9 +121,12 @@ class Text2Video:
         return {
             "required": {
                 "client": ("LUMACLIENT", {"forceInput": True}),
+                "model": (["ray-flash-2", "ray-2", "ray-1.6"],),
                 "prompt": ("STRING", {"multiline": True, "default": ""}),
+                "duration": (["5s", "9s"],),
                 "loop": ("BOOLEAN", {"default": False}),
                 "aspect_ratio": (["9:16", "3:4", "1:1", "4:3", "16:9", "21:9"],),
+                "resolution": (["540p", "720p"],),
                 "save": ("BOOLEAN", {"default": True}),
             },
             "optional": {"filename": ("STRING", {"default": ""})},
@@ -184,9 +136,9 @@ class Text2Video:
     RETURN_NAMES = ("video_url", "generation_id")
     OUTPUT_NODE = True
     FUNCTION = "run"
-    CATEGORY = "LumaAI/Ray1.6"
+    CATEGORY = "LumaAI/Ray"
 
-    def run(self, client, prompt, loop, aspect_ratio, save, filename):
+    def run(self, client, model, prompt, duration, loop, aspect_ratio, resolution, save, filename):
         """
         Generate a video from a text prompt.
         """
@@ -194,26 +146,15 @@ class Text2Video:
             raise ValueError("Prompt is required")
 
         generation = client.generations.create(
-            prompt=prompt, loop=loop, aspect_ratio=aspect_ratio
+            prompt=prompt,
+            model=model,
+            loop=loop,
+            aspect_ratio=aspect_ratio,
+            duration=duration,
+            resolution=resolution,
         )
         generation_id = generation.id
-        completed = False
-        while not completed:
-            generation = client.generations.get(id=generation_id)
-            if generation.state == "completed":
-                completed = True
-            elif generation.state == "failed":
-                raise ValueError(f"Generation failed: {generation.failure_reason}")
-            time.sleep(3)
-
-        video_url = generation.assets.video
-        if save:
-            directory, filename = parse_filename(filename)
-            if filename == "":
-                filename = generation_id
-            download_file(
-                video_url, os.path.join(self.output_dir, directory, filename + ".mp4")
-            )
+        video_url = wait_for_generation(client, generation_id, save, filename, self.output_dir)
 
         return {
             "ui": {"text": [generation_id]},
@@ -238,7 +179,10 @@ class Image2Video:
             "required": {
                 "client": ("LUMACLIENT", {"forceInput": True}),
                 "prompt": ("STRING", {"multiline": True, "default": ""}),
+                "model": (["ray-flash-2", "ray-2", "ray-1.6"],),
+                "duration": (["5s", "9s"],),
                 "loop": ("BOOLEAN", {"default": False}),
+                "resolution": (["540p", "720p"],),
                 "save": ("BOOLEAN", {"default": True}),
             },
             "optional": {
@@ -251,13 +195,16 @@ class Image2Video:
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("video_url", "generation_id")
     FUNCTION = "run"
-    CATEGORY = "LumaAI/Ray1.6"
+    CATEGORY = "LumaAI/Ray"
 
     def run(
         self,
         client,
+        model,
         prompt,
+        duration,
         loop,
+        resolution,
         save,
         init_image_url="",
         final_image_url="",
@@ -276,26 +223,15 @@ class Image2Video:
             keyframes["frame1"] = {"type": "image", "url": final_image_url}
 
         generation = client.generations.create(
-            prompt=prompt, loop=loop, keyframes=keyframes
+            prompt=prompt,
+            model=model,
+            loop=loop,
+            duration=duration,
+            resolution=resolution,
+            keyframes=keyframes,
         )
         generation_id = generation.id
-        completed = False
-        while not completed:
-            generation = client.generations.get(id=generation_id)
-            if generation.state == "completed":
-                completed = True
-            elif generation.state == "failed":
-                raise ValueError(f"Generation failed: {generation.failure_reason}")
-            time.sleep(3)
-
-        video_url = generation.assets.video
-        if save:
-            directory, filename = parse_filename(filename)
-            if filename == "":
-                filename = generation_id
-            download_file(
-                video_url, os.path.join(self.output_dir, directory, filename + ".mp4")
-            )
+        video_url = wait_for_generation(client, generation_id, save, filename, self.output_dir)
 
         return {
             "ui": {"text": [generation_id]},
@@ -320,6 +256,8 @@ class InterpolateGenerations:
             "required": {
                 "client": ("LUMACLIENT", {"forceInput": True}),
                 "prompt": ("STRING", {"multiline": True, "default": ""}),
+                "model": (["ray-flash-2", "ray-2", "ray-1.6"],),
+                "resolution": (["540p", "720p"],),
                 "save": ("BOOLEAN", {"default": True}),
                 "generation_id_1": ("STRING", {"default": "", "forceInput": True}),
                 "generation_id_2": ("STRING", {"default": "", "forceInput": True}),
@@ -330,12 +268,14 @@ class InterpolateGenerations:
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("video_url", "generation_id")
     FUNCTION = "run"
-    CATEGORY = "LumaAI/Ray1.6"
+    CATEGORY = "LumaAI/Ray"
 
     def run(
         self,
         client,
+        model,
         prompt,
+        resolution,
         save,
         generation_id_1,
         generation_id_2,
@@ -353,25 +293,11 @@ class InterpolateGenerations:
                 "frame0": {"type": "generation", "id": generation_id_1},
                 "frame1": {"type": "generation", "id": generation_id_2},
             },
+            model=model,
+            resolution=resolution,
         )
         generation_id = generation.id
-        completed = False
-        while not completed:
-            generation = client.generations.get(id=generation_id)
-            if generation.state == "completed":
-                completed = True
-            elif generation.state == "failed":
-                raise ValueError(f"Generation failed: {generation.failure_reason}")
-            time.sleep(3)
-
-        video_url = generation.assets.video
-        if save:
-            directory, filename = parse_filename(filename)
-            if filename == "":
-                filename = generation_id
-            download_file(
-                video_url, os.path.join(self.output_dir, directory, filename + ".mp4")
-            )
+        video_url = wait_for_generation(client, generation_id, save, filename, self.output_dir)
 
         return {
             "ui": {"text": [generation_id]},
@@ -396,6 +322,9 @@ class ExtendGeneration:
             "required": {
                 "client": ("LUMACLIENT", {"forceInput": True}),
                 "prompt": ("STRING", {"multiline": True, "default": ""}),
+                "model": (["ray-flash-2", "ray-2", "ray-1.6"],),
+                "loop": ("BOOLEAN", {"default": False}),
+                "resolution": (["540p", "720p"],),
                 "save": ("BOOLEAN", {"default": True}),
             },
             "optional": {
@@ -410,12 +339,15 @@ class ExtendGeneration:
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("video_url", "generation_id")
     FUNCTION = "run"
-    CATEGORY = "LumaAI/Ray1.6"
+    CATEGORY = "LumaAI/Ray"
 
     def run(
         self,
         client,
+        model,
         prompt,
+        loop,
+        resolution,
         save,
         init_image_url="",
         final_image_url="",
@@ -447,31 +379,121 @@ class ExtendGeneration:
         if final_generation_id != "":
             keyframes["frame1"] = {"type": "generation", "id": final_generation_id}
 
-        generation = client.generations.create(prompt=prompt, keyframes=keyframes)
-        new_generation_id = generation.id
-        completed = False
-        while not completed:
-            generation = client.generations.get(id=new_generation_id)
-            if generation.state == "completed":
-                completed = True
-            elif generation.state == "failed":
-                raise ValueError(f"Generation failed: {generation.failure_reason}")
-            time.sleep(3)
-
-        video_url = generation.assets.video
-        if save:
-            directory, filename = parse_filename(filename)
-            if filename == "":
-                filename = new_generation_id
-            download_file(
-                video_url, os.path.join(self.output_dir, directory, filename + ".mp4")
-            )
+        generation = client.generations.create(
+            prompt=prompt,
+            model=model,
+            loop=loop,
+            resolution=resolution,
+            keyframes=keyframes,
+        )
+        generation_id = generation.id
+        video_url = wait_for_generation(client, generation_id, save, filename, self.output_dir)
 
         return {
-            "ui": {"text": [new_generation_id]},
+            "ui": {"text": [generation_id]},
             "result": (
                 video_url,
-                new_generation_id,
+                generation_id,
+            ),
+        }
+
+
+class UpscaleGeneration:
+    def __init__(self):
+        self.output_dir = folder_paths.get_output_directory()
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "client": ("LUMACLIENT", {"forceInput": True}),
+                "generation_id": ("STRING", {"default": "", "forceInput": True}),
+                "resolution": (["540p", "720p", "1080p", "4k"],),
+                "save": ("BOOLEAN", {"default": True}),
+            },
+            "optional": {
+                "filename": ("STRING", {"default": ""}),
+            },
+        }
+
+    RETURN_TYPES = ("STRING", "STRING")
+    RETURN_NAMES = ("video_url", "generation_id")
+    FUNCTION = "run"
+    CATEGORY = "LumaAI/Upscale"
+
+    def run(
+        self,
+        client,
+        generation_id,
+        resolution,
+        save,
+        filename="",
+    ):
+        """
+        Upscale a generation.
+        """
+        generation = client.generations.upscale(id=generation_id, resolution=resolution)
+        upscaled_generation_id = generation.id
+        video_url = wait_for_generation(client, upscaled_generation_id, save, filename, self.output_dir)
+
+        return {
+            "ui": {"text": [upscaled_generation_id]},
+            "result": (
+                video_url,
+                upscaled_generation_id,
+            ),
+        }
+
+
+class AddAudio2Video:
+    def __init__(self):
+        self.output_dir = folder_paths.get_output_directory()
+    
+    @classmethod
+    def IS_CHANGED(cls, *args, **kwargs):
+        return float("NaN")
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "client": ("LUMACLIENT", {"forceInput": True}),
+                "generation_id": ("STRING", {"default": "", "forceInput": True}),
+                "prompt": ("STRING", {"multiline": True, "default": ""}),
+                "negative_prompt": ("STRING", {"multiline": True, "default": ""}),
+                "save": ("BOOLEAN", {"default": True}),
+            },
+            "optional": {
+                "filename": ("STRING", {"default": ""}),
+            },
+        }
+
+    RETURN_TYPES = ("STRING", "STRING")
+    RETURN_NAMES = ("video_url", "generation_id")
+    FUNCTION = "run"
+    CATEGORY = "LumaAI/Audio"
+
+    def run(
+        self,
+        client,
+        generation_id,
+        prompt,
+        negative_prompt,
+        save,
+        filename="",
+    ):
+        """
+        Upscale a generation.
+        """
+        generation = client.generations.audio(id=generation_id, prompt=prompt, negative_prompt=negative_prompt)
+        with_audio_generation_id = generation.id
+        video_url = wait_for_generation(client, with_audio_generation_id, save, filename, self.output_dir)
+
+        return {
+            "ui": {"text": [with_audio_generation_id]},
+            "result": (
+                video_url,
+                with_audio_generation_id,
             ),
         }
 
@@ -484,6 +506,10 @@ class PreviewVideo:
                 "video_url": ("STRING", {"forceInput": True}),
             }
         }
+
+    @classmethod
+    def IS_CHANGED(cls, *args, **kwargs):
+        return float("NaN")
 
     OUTPUT_NODE = True
     FUNCTION = "run"

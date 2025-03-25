@@ -37,7 +37,7 @@ app.registerExtension({
                         sz[1] = this.size[1];
                     }
                     this.onResize?.(sz);
-                    app.graph.setDirtyCanvas(true, false);
+                    app.graph.setDirtyCanvas(true, true);
                 });
             }
 
