@@ -45,29 +45,35 @@ Most of the nodes allow you to save locally the output video. If you keep the de
 
 For images, the node will always save the image locally, but you can set the `filename` to save it with a custom name.
 
+**Notes: Duration and resolution parameters are only supported for Ray 2 and Ray 2 Flash models.**
+
 ### LumaAIClient
 
 This node is used to create a LumaAI client.
 
-### Ray2Text2Video
-
-This node is used to generate a video from a text prompt with the latest and most powerful model, Ray2.
-
 ### LumaText2Video
 
-This node is used to generate a video from a text prompt.
+This node is used to generate a video from a text prompt. You can now choose between different models and resolutions.
 
 ### LumaImage2Video
 
-This node is used to generate a video from an image. The image can be used as the first or last frame.
+This node is used to generate a video from an image. The image can be used as the first or last frame. You can now choose between different models and resolutions.
 
 ### LumaInterpolateGenerations
 
-This node is used to interpolate between two generations.
+This node is used to interpolate between two generations. You can now choose between different models and resolutions.
 
 ### LumaExtendGeneration
 
-This node is used to extend a generation. You can choose to extend before or after the generation.
+This node is used to extend a generation. You can choose to extend before or after the generation. You can now choose between different models and resolutions.
+
+### LumaUpscaleGeneration
+
+This node is used to upscale a generation.
+
+### LumaAddAudio2Video
+
+This node is used to add audio to a video. When using this node with `Preview Video` node, you will notice that the audio won't play in comfy. For that, right click on the video and select `Open Image`, which will open the video in a new tab and you will be able to hear the audio.
 
 ### LumaPreviewVideo
 

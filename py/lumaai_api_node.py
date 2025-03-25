@@ -448,6 +448,10 @@ class UpscaleGeneration:
 class AddAudio2Video:
     def __init__(self):
         self.output_dir = folder_paths.get_output_directory()
+    
+    @classmethod
+    def IS_CHANGED(cls, *args, **kwargs):
+        return float("NaN")
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -481,7 +485,7 @@ class AddAudio2Video:
         """
         Upscale a generation.
         """
-        generation = client.generations.audio.create(id=generation_id, prompt=prompt, negative_prompt=negative_prompt)
+        generation = client.generations.audio(id=generation_id, prompt=prompt, negative_prompt=negative_prompt)
         with_audio_generation_id = generation.id
         video_url = wait_for_generation(client, with_audio_generation_id, save, filename, self.output_dir)
 
@@ -502,6 +506,10 @@ class PreviewVideo:
                 "video_url": ("STRING", {"forceInput": True}),
             }
         }
+
+    @classmethod
+    def IS_CHANGED(cls, *args, **kwargs):
+        return float("NaN")
 
     OUTPUT_NODE = True
     FUNCTION = "run"
